@@ -1,0 +1,289 @@
+Отлично, название NEXCODE AI звучит мощно и в стиле современных инструментов для разработчиков. Токен я интегрировал в финальную версию кода.
+
+Я внес последние правки: обновил заголовки, поправил стили под новое название и вставил твой токен. Теперь этот код полностью готов к тому, чтобы ты просто скопировал его и залил в файл index.html на свой GitHub Pages.
+
+Итоговый код для GitHub Pages (NEXCODE AI)
+HTML
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>NEXCODE AI | Multimodal Interface</title>
+    <style>
+        /* --- ЦИФРОВАЯ ЭСТЕТИКА NEXCODE --- */
+        :root {
+            --accent: #00f2ff;
+            --secondary: #7000ff;
+            --bg: #010103;
+            --matrix-green: rgba(0, 255, 100, 0.15);
+        }
+
+        body {
+            background-color: var(--bg);
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Эффект фона */
+        canvas#matrix {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1200px;
+            padding: 40px 10px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            margin: 0;
+            letter-spacing: 10px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(0, 242, 255, 0.4));
+        }
+
+        header p {
+            color: var(--accent);
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        /* Панели управления */
+        .panel {
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #222;
+            border-radius: 8px;
+            color: #fff;
+            padding: 15px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 15px;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+        }
+
+        #prompt { height: 100px; }
+        #output { height: 450px; color: var(--accent); }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: var(--accent);
+            color: #000;
+            box-shadow: 0 0 25px var(--accent);
+        }
+
+        .run-btn {
+            border-color: #0f0;
+            color: #0f0;
+        }
+
+        .run-btn:hover {
+            background: #0f0;
+            box-shadow: 0 0 25px #0f0;
+        }
+
+        select {
+            background: #000;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+
+        /* Консоль */
+        .console-box {
+            background: #000;
+            border-radius: 8px;
+            border: 1px solid #1a1a1a;
+            padding: 15px;
+            margin-top: 15px;
+            height: 150px;
+            overflow-y: auto;
+            color: #0f0;
+            font-size: 13px;
+        }
+
+        .status-bar {
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="container">
+    <header>
+        <h1>NEXCODE AI</h1>
+        <p>Advanced Hybrid Programming Intelligence</p>
+    </header>
+
+    <div class="panel">
+        <textarea id="prompt" placeholder="ОПИШИ ЗАДАЧУ: Например, 'Создай сложный интерфейс для инвентаря в Minecraft Java'"></textarea>
+        <div class="controls">
+            <button onclick="generateAI()">СГЕНЕРИРОВАТЬ И ПРОВЕРИТЬ КОД</button>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <span style="color: var(--accent); font-weight: bold;">GENERATED_LOG</span>
+            <select id="lang">
+                <option value="java">Java</option>
+                <option value="python">Python</option>
+                <option value="javascript">JavaScript</option>
+                <option value="csharp">C#</option>
+            </select>
+        </div>
+        <textarea id="output" readonly placeholder="// ИИ ожидает ввод..."></textarea>
+        
+        <div class="controls">
+            <button class="run-btn" onclick="executeCode()">ЗАПУСТИТЬ В NEX-CORE</button>
+        </div>
+
+        <div class="console-box" id="terminal">> System ready. Waiting for input...</div>
+        <div class="status-bar">
+            <span>Uptime: Always Free</span>
+            <span id="ai-info">Mode: Hybrid Intelligence</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    const TOKEN = "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";
+
+    // Генерация кода через Hugging Face
+    async function generateAI() {
+        const input = document.getElementById('prompt').value;
+        const outArea = document.getElementById('output');
+        if(!input) return alert("Введите запрос!");
+
+        outArea.value = "// [NEXCODE] Анализирую структуру...\n// Подключаю модули логики...\n// Ожидание ответа от нейросети...";
+
+        try {
+            const res = await fetch("https://api-inference.huggingface.co/models/deepseek-ai/deepseek-coder-6.7b-instruct", {
+                method: "POST",
+                headers: { "Authorization": `Bearer ${TOKEN}`, "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    inputs: `Task: ${input}. Output only high-quality professional code. Include class Main if Java. No explanations.`,
+                    parameters: { max_new_tokens: 1200, temperature: 0.1 }
+                })
+            });
+            const data = await res.json();
+            let code = data[0].generated_text || "Ошибка доступа";
+            code = code.replace(/```[a-z]*/g, "").replace(/```/g, "").trim();
+            outArea.value = code;
+        } catch (e) {
+            outArea.value = "// Ошибка NEXCODE: Проблема с API или токеном.";
+        }
+    }
+
+    // Запуск кода через Piston API
+    async function executeCode() {
+        const code = document.getElementById('output').value;
+        const language = document.getElementById('lang').value;
+        const terminal = document.getElementById('terminal');
+
+        terminal.innerText = "> Initializing execution environment...\n> Compiling code...\n";
+
+        try {
+            const response = await fetch("https://emkc.org/api/v2/piston/execute", {
+                method: "POST",
+                body: JSON.stringify({
+                    language: language,
+                    version: "*",
+                    files: [{ content: code }]
+                })
+            });
+            const result = await response.json();
+            terminal.innerText = result.run.output || result.run.stderr || "> Process finished with no output.";
+        } catch (e) {
+            terminal.innerText = "> Runtime Error: Connection to core failed.";
+        }
+    }
+
+    // --- ФОНОВАЯ АНИМАЦИЯ (MATRIX) ---
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const chars = "0123456789ABCDEFHIJKLMNOPQRSTUVXYZ";
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
+
+    function draw() {
+        ctx.fillStyle = "rgba(1, 1, 3, 0.05)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "rgba(0, 242, 255, 0.3)";
+        ctx.font = fontSize + "px monospace";
+        for (let i = 0; i < drops.length; i++) {
+            const text = chars.charAt(Math.floor(Math.random() * chars.length));
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            drops[i]++;
+        }
+    }
+    setInterval(draw, 35);
+</script>
+
+</body>
+</html>
